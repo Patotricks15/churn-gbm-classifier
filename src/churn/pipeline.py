@@ -53,7 +53,13 @@ def run_experiment(tx, train_snapshots, validation_snapshot, test_snapshots, h_d
         main["proba_lgbm"] = lgb_p
         preds.append(main)
 
-    return pd.DataFrame(rows), pd.concat(preds, ignore_index=True), gain_importance(lgbm), best_params
+    return (
+        pd.DataFrame(rows),
+        pd.concat(preds, ignore_index=True),
+        gain_importance(lgbm),
+        best_params,
+        lgbm,
+    )
 
 
 def h_sensitivity(tx, train_snapshots, validation_snapshot, test_snapshots, h_values, n_iter) -> pd.DataFrame:

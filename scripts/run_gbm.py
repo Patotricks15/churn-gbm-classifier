@@ -11,6 +11,7 @@ from churn.config import (
     VALIDATION_SNAPSHOT,
 )
 from churn.data import load_olist
+from churn.features import FEATURE_COLUMNS
 from churn.metrics import decile_table
 from churn.pipeline import h_sensitivity, monthly_churn_rate, run_experiment
 from churn.plots import (
@@ -35,12 +36,16 @@ def main() -> None:
     figures.mkdir(parents=True, exist_ok=True)
 
     tx = load_olist(args.input_dir)
-    results, preds, importance, best_params = run_experiment(
+    results, preds, importance, best_params, lgbm = run_experiment(
         tx, TRAIN_SNAPSHOTS, VALIDATION_SNAPSHOT, TEST_SNAPSHOTS, args.h, args.n_iter
     )
     results.to_csv(out / "ch02_metrics.csv", index=False)
     importance.to_csv(out / "ch02_feature_importance.csv", index=False)
     (out / "ch02_best_params.txt").write_text(repr(best_params) + "\n")
+    lgbm.booster_.save_model(str(out / "ch02_lgbm.txt"))
+    preds[FEATURE_COLUMNS + ["snapshot_date", "churned", "proba_lgbm"]].to_csv(
+        out / "ch02_test_scores.csv", index=False
+    )
 
     sensitivity = h_sensitivity(
         tx, TRAIN_SNAPSHOTS, VALIDATION_SNAPSHOT, TEST_SNAPSHOTS, H_SENSITIVITY_DAYS, args.n_iter

@@ -51,6 +51,7 @@ Running the script writes to `reports/`:
 - `ch02_h_sensitivity.csv`: the same metrics for `H` in {30, 60, 90} days.
 - `ch02_monthly_churn.csv`: monthly churn rate for the main population.
 - `ch02_feature_importance.csv` and `ch02_best_params.txt`: gain importance and the selected hyperparameters.
+- `ch02_lgbm.txt` and `ch02_test_scores.csv`: the tuned LightGBM model (text format) and the test-snapshot features, churn label and LightGBM score. These are the inputs to [churn-explanation](https://github.com/Patotricks15/churn-explanation) (CH05).
 - `figures/`: PR curves, reliability curves, lift by decile, feature importance by gain, and monthly churn rate. Titles state the dataset, snapshot date, `H`, and the model version.
 
 ## Results
